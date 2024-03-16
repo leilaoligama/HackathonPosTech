@@ -1,14 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
+using HackathonPosTech.Domain.Common;
+using HackathonPosTech.Domain.Interfaces;
+using HackathonPosTech.Infra.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using HackathonPosTech.App.Data;
+
 var builder = WebApplication.CreateBuilder(args);
-//builder.Services.AddDbContext<UploadContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("UploadContext") ?? throw new InvalidOperationException("Connection string 'UploadContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDomain();
+builder.Services.AddInfrastructure();
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
+
+using var serviceScope = app.Services.GetService<IServiceScopeFactory>()!.CreateScope();
+var messageProcessor = serviceScope.ServiceProvider.GetRequiredService<IMessageProcessor>();
+await messageProcessor.StartAsync(CancellationToken.None);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
