@@ -25,6 +25,24 @@ A partir de uma POC (prove of concept) em .NET com C#, que realiza um processame
 
 **Back-end:** C#, .NET 7, Worker Service, Service Bus, SQL Server
 
+## Scripts de criação do Banco de Dados
+
+```bash
+CREATE TABLE [dbo].[upload]
+  (
+     [id]            [INT] IDENTITY(1, 1) NOT NULL,
+     [nome]          [VARCHAR](50) NULL,
+     [email]         [VARCHAR](50) NULL,
+     [caminhoupload] [VARCHAR](max) NULL,
+     [caminhozip]    [VARCHAR](max) NULL,
+     CONSTRAINT [PK_Upload] PRIMARY KEY CLUSTERED ( [id] ASC )WITH (
+     statistics_norecompute = OFF, ignore_dup_key = OFF,
+     optimize_for_sequential_key = OFF) ON [PRIMARY]
+  )
+ON [PRIMARY]
+textimage_on [PRIMARY]
+go 
+```
 
 
 
