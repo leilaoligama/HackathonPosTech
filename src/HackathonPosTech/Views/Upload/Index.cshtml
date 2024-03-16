@@ -1,0 +1,52 @@
+﻿@model IEnumerable<HackathonPosTech.App.Models.UploadViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CaminhoZip)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(Model != null )
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CaminhoZip)
+                <tr>
+                    <td><img src="@item.CaminhoZip" width="80" height="90" /></td>
+                </tr>
+                </td>
+            <td>
+                <a href="my-program.zip">
+            </td>
+            </tr>
+            }
+        }
+    </tbody>
+</table>
