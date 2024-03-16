@@ -1,6 +1,9 @@
 using HackathonPosTech.Domain.Common;
 using HackathonPosTech.Domain.Interfaces;
 using HackathonPosTech.Infra.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using HackathonPosTech.App.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +37,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Upload}/{action=Index}/{id?}");
 
 app.Run();
