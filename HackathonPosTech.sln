@@ -5,9 +5,9 @@ VisualStudioVersion = 17.9.34511.98
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HackathonPosTech.App", "src\HackathonPosTech\HackathonPosTech.App.csproj", "{269DFFE6-9571-4940-8B5A-8554BC61013B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackathonPosTech.Domain", "src\HackathonPosTech.Domain\HackathonPosTech.Domain.csproj", "{06C15ECF-C370-472F-9349-F5CC0A379711}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HackathonPosTech.Domain", "src\HackathonPosTech.Domain\HackathonPosTech.Domain.csproj", "{06C15ECF-C370-472F-9349-F5CC0A379711}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackathonPosTech.Infra", "src\HackathonPosTech.Infra\HackathonPosTech.Infra.csproj", "{4487A3B0-0772-4AA4-9344-07D13D132A63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HackathonPosTech.Infra", "src\HackathonPosTech.Infra\HackathonPosTech.Infra.csproj", "{4487A3B0-0772-4AA4-9344-07D13D132A63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,9 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using HackathonPosTech.App.Data;
 var builder = WebApplication.CreateBuilder(args);
+//builder.Services.AddDbContext<UploadContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("UploadContext") ?? throw new InvalidOperationException("Connection string 'UploadContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -22,6 +27,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Upload}/{action=Index}/{id?}");
 
 app.Run();
