@@ -20,10 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UploadedFiles\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\HackathonPosTech.Domain\HackathonPosTech.Domain.csproj" />
     <ProjectReference Include="..\HackathonPosTech.Infra\HackathonPosTech.Infra.csproj" />
   </ItemGroup>

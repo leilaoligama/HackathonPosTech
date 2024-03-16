@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HackathonPosTech.Domain.Dtos;
+﻿namespace HackathonPosTech.Domain.Dtos;
 public class UploadMessageDto
 {
+    public Guid IdUpload { get; set; }
 }

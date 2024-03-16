@@ -1,35 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using HackathonPosTech.App.Models;
+using HackathonPosTech.Domain.Dtos;
+using HackathonPosTech.Domain.Entities;
+using HackathonPosTech.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using HackathonPosTech.App.Data;
-using HackathonPosTech.App.Models;
-using Microsoft.AspNetCore.Http;
-using System.Text.RegularExpressions;
-using Azure.Storage.Blobs;
 
 namespace HackathonPosTech.Controllers
 {
     public class UploadController : Controller
     {
-        private readonly UploadContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IBaseRepository<Upload> _repository;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public UploadController(UploadContext context, IConfiguration configuration)
+        public UploadController(IConfiguration configuration, IBaseRepository<Upload> repository, IMessagePublisher messagePublisher)
         {
-            _context = context;
             _configuration = configuration;
+            _repository = repository;
+            _messagePublisher = messagePublisher;
         }
 
         // GET: Upload
         public async Task<IActionResult> Index()
         {
-            //return _context.UploadViewModel != null ?
-            //            View(await _context.UploadViewModel.ToListAsync()) :
-            //            Problem("Entity set 'UploadContext.UploadViewModel'  is null.");
             return View();
         }
 
@@ -44,73 +36,41 @@ namespace HackathonPosTech.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(UploadViewModel uploadViewModel, List<IFormFile> files)
+        public async Task<IActionResult> Create(UploadViewModel uploadViewModel, IFormFile file)
         {
             if (ModelState.IsValid)
             {
-                uploadViewModel.Id = Guid.NewGuid();
-                _context.Add(uploadViewModel);
-                await _context.SaveChangesAsync();
+                var caminhoUpload = SalvarArquivoLocal(file);
 
-                SalvarArquivoLocal(files);
+                var upload = new Upload
+                {
+                    Id = Guid.NewGuid(),
+                    Nome = uploadViewModel.Nome,
+                    Email = uploadViewModel.Email,
+                    CaminhoUpload = caminhoUpload
+                };
+                await _repository.AddAsync(upload);
+
+                await _messagePublisher.QueueUploadMessageAsync(new UploadMessageDto { IdUpload = upload.Id });
 
                 return RedirectToAction(nameof(Index));
             }
             return View(uploadViewModel);
         }
 
-        private void SalvarArquivoLocal(List<IFormFile> files)
+        private string SalvarArquivoLocal(IFormFile file)
         {
-            long size = files.Sum(f => f.Length);
+            var filePath = Path.GetTempFileName();
 
-            foreach (var formFile in files)
+            if (file.Length > 0)
             {
-                if (formFile.Length > 0)
+                using (var stream = System.IO.File.Create(filePath))
                 {
-                    var filePath = Path.GetTempFileName();
-
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        formFile.CopyToAsync(stream);
-                    }
+                    file.CopyToAsync(stream);
                 }
             }
-        }
 
-        public string UploadImagens(string base64Image)
-        {
-            var BlobStorage = _configuration.GetSection("BlobStorage").Value;
-
-            // Gera um nome randomico para imagem
-            var fileName = Guid.NewGuid().ToString() + ".jpg";
-
-            // Limpa o hash enviado
-            var data = new Regex(@"^data:image\/[a-z]+;base64,").Replace(base64Image, "");
-
-            // Gera um array de Bytes
-            byte[] imageBytes = Convert.FromBase64String(data);
-
-            // Define o BLOB no qual a imagem será armazenada
-            var blobClient = new BlobClient(BlobStorage, "dados", fileName);
-
-            // Envia a imagem
-            using (var stream = new MemoryStream(imageBytes))
-            {
-                blobClient.Upload(stream);
-            }
-
-            // Retorna a URL da imagem
-            var blobUri = blobClient.Uri.AbsoluteUri;
-
-            /*SalvarImagem(blobUri, fileName);*/
-
-            return blobUri;
-        }
-
-        private bool UploadViewModelExists(Guid id)
-        {
-            //return (_context.UploadViewModel?.Any(e => e.Id == id)).GetValueOrDefault();
-            return true;
+            return filePath;
         }
     }
 }

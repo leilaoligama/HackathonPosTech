@@ -9,8 +9,8 @@ using System.Text.Json;
 namespace HackathonPosTech.Infra.Messages;
 public class MessageProcessor : IHostedService, IMessageProcessor
 {
-    const string usersQueue = "upload";
-    const string emailQueue = "email";
+    const string uploadQueue = "processavideo";
+    const string emailQueue = "notificaemail";
 
     readonly ServiceBusProcessor _uploadQueueProcessor;
     readonly ServiceBusProcessor _emailQueueProcessor;
@@ -27,13 +27,13 @@ public class MessageProcessor : IHostedService, IMessageProcessor
         var sbusClient = new ServiceBusClient(serviceBusConnectionString);
 
         _sbusAdminClient = new ServiceBusAdministrationClient(serviceBusConnectionString);
-        _uploadQueueProcessor = sbusClient.CreateProcessor(usersQueue, new ServiceBusProcessorOptions { AutoCompleteMessages = false });
+        _uploadQueueProcessor = sbusClient.CreateProcessor(uploadQueue, new ServiceBusProcessorOptions { AutoCompleteMessages = false });
         _emailQueueProcessor = sbusClient.CreateProcessor(emailQueue, new ServiceBusProcessorOptions { AutoCompleteMessages = false });
 
         _userMessageProcessorService = userMessageProcessorService;
         _emailMessageProcessorService = emailMessageProcessorService;
 
-        ValidateAndCreateQueue(usersQueue).Wait();
+        ValidateAndCreateQueue(uploadQueue).Wait();
         ValidateAndCreateQueue(emailQueue).Wait();
     }
 

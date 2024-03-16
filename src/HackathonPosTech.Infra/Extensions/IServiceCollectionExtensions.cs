@@ -37,6 +37,7 @@ public static class IServiceCollectionExtensions
     private static IServiceCollection AddHostedServices(this IServiceCollection services)
     {
         services.AddScoped<IMessagePublisher, MessagePublisher>();
+        services.AddScoped<IMessageProcessor, MessageProcessor>();
 
         return services;
     }

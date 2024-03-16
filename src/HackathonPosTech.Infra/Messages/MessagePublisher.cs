@@ -9,8 +9,8 @@ namespace HackathonPosTech.Infra.Messages;
 
 public class MessagePublisher : IMessagePublisher
 {
-    const string uploadQueue = "upload";
-    const string emailQueue = "email";
+    const string uploadQueue = "processavideo";
+    const string emailQueue = "notificaemail";
 
     readonly ServiceBusSender _uploadQueueSender;
     readonly ServiceBusSender _emailQueueSender;

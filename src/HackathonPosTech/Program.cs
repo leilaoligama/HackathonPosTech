@@ -1,9 +1,6 @@
 using HackathonPosTech.Domain.Common;
 using HackathonPosTech.Domain.Interfaces;
 using HackathonPosTech.Infra.Extensions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using HackathonPosTech.App.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
